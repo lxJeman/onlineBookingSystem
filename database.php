@@ -17,6 +17,7 @@ try {
         person TEXT NOT NULL,
         contact TEXT NOT NULL,
         date TEXT NOT NULL,
+        time TEXT NOT NULL, -- Added the time column
         extra TEXT NOT NULL
     );";
 
@@ -25,8 +26,6 @@ try {
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage() . "\n"; 
 }
-
-
 
 // Insert a user into the database
 function insertUser($name, $password) {
@@ -42,7 +41,6 @@ function insertUser($name, $password) {
     }
 }
 
-
 // Access a user from the database
 function accessUser($name, $password) {
     global $db;
@@ -54,6 +52,24 @@ function accessUser($name, $password) {
         echo "User successfully login.\n";
     } catch (PDOException $e) {
         echo "Error inserting user: " . $e->getMessage() . "\n";
+    }
+}
+
+// Insert an event into the database
+function insertEvent($name, $person, $contact, $date, $time, $extra) {
+    global $db;
+    try {
+        $stmt = $db->prepare("INSERT INTO events (name, person, contact, date, time, extra) VALUES (:name, :person, :contact, :date, :time, :extra)");
+        $stmt->bindParam(":name", $name);
+        $stmt->bindParam(":person", $person);
+        $stmt->bindParam(":contact", $contact);
+        $stmt->bindParam(":date", $date);
+        $stmt->bindParam(":time", $time); // Bind the time parameter
+        $stmt->bindParam(":extra", $extra);
+        $stmt->execute();
+        echo "Event inserted successfully.\n";
+    } catch (PDOException $e) {
+        echo "Error inserting event: " . $e->getMessage() . "\n";
     }
 }
 ?>

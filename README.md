@@ -1,6 +1,6 @@
 # Online Booking System
 
-A simple web-based booking system built with PHP and SQLite that allows users to manage events and appointments through an interactive calendar interface.
+A web-based booking system built with PHP and MySQL (PHPMyAdmin) that allows users to manage events and appointments through an interactive calendar interface.
 
 ## Features
 
@@ -29,19 +29,23 @@ A simple web-based booking system built with PHP and SQLite that allows users to
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/onlineBookingSystem.git
+git clone https://github.com/lxjeman/onlineBookingSystem.git
 ```
 
 2. Configure your web server (Apache/Nginx) to serve the project directory
 
-3. Ensure PHP and SQLite are installed:
-```bash
-sudo apt-get install php php-sqlite3
+3. Set up the MySQL Database:
+   - Open PHPMyAdmin in your browser
+   - Create a new database named 'booking_system'
+   - Update database credentials in `database.php`:
+```php
+define('DB_USER', 'your_username');
+define('DB_PASS', 'your_password');
 ```
 
-4. Set appropriate permissions for the SQLite database:
+4. Ensure PHP and MySQL are installed:
 ```bash
-chmod 755 local.db
+sudo apt-get install php php-mysql
 ```
 
 ## File Structure
@@ -52,8 +56,7 @@ onlineBookingSystem/
 ├── login.php         # User login interface
 ├── registration.php  # New user registration
 ├── dashboard.php     # Main calendar and event management
-├── fetchEvents.php   # API endpoint for event data
-└── local.db         # SQLite database
+└── fetchEvents.php   # API endpoint for event data
 ```
 
 ## Usage
@@ -71,23 +74,23 @@ onlineBookingSystem/
 ### Users Table
 ```sql
 CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    password TEXT NOT NULL
-);
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 ### Events Table
 ```sql
 CREATE TABLE events (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    person TEXT NOT NULL,
-    contact TEXT NOT NULL,
-    date TEXT NOT NULL,
-    time TEXT NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    person VARCHAR(255) NOT NULL,
+    contact VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
     extra TEXT NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 ## Security Features
@@ -101,7 +104,9 @@ CREATE TABLE events (
 ## Requirements
 
 - PHP 7.4 or higher
-- SQLite3
+- MySQL 5.7 or higher
+- PHPMyAdmin
+- Apache/Nginx web server
 - Modern web browser with JavaScript enabled
 
 ## License

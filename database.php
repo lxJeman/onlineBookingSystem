@@ -1,30 +1,39 @@
 <?php
+// Database configuration
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');     // Change to your MySQL username
+define('DB_PASS', '');         // Change to your MySQL password
+define('DB_NAME', 'booking_system');
+
 try {
-    $db = new PDO("sqlite:local.db");
+    // Create MySQL connection
+    $db = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    // Create users table
     $createTableQuery = "
     CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        password TEXT NOT NULL
-    );";
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
+    // Create events table
     $createTable2Query = "
     CREATE TABLE IF NOT EXISTS events (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        person TEXT NOT NULL,
-        contact TEXT NOT NULL,
-        date TEXT NOT NULL,
-        time TEXT NOT NULL, -- Added the time column
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        person VARCHAR(255) NOT NULL,
+        contact VARCHAR(255) NOT NULL,
+        date DATE NOT NULL,
+        time TIME NOT NULL,
         extra TEXT NOT NULL
-    );";
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
     $db->exec($createTableQuery);
     $db->exec($createTable2Query);
 } catch (PDOException $e) {
-    echo "Error: " . $e->getMessage() . "\n"; 
+    die("Connection failed: " . $e->getMessage());
 }
 
 // Insert a user into the database
